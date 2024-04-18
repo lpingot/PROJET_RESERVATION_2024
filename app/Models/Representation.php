@@ -48,7 +48,7 @@ class Representation extends Model
     {
         return $this->belongsTo(Show::class);
     }
-    public function userRepresenation()
+    public function userRepresenations()
     {
         return $this->hasMany(UserRepresentation::class);
     }
