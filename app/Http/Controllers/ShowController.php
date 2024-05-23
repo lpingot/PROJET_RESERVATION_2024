@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Show;
+use App\Models\Tag;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ShowController extends Controller
 {
@@ -12,10 +15,18 @@ class ShowController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)  // Ajoutez Request ici
     {
-        $shows = Show::all();
-        
+        $query = Show::query();
+
+        if ($request->has('tag')) {
+            $tag = $request->input('tag');
+            $query->whereHas('tags', function($q) use ($tag) {
+                $q->where('tag', 'LIKE', "%{$tag}%");
+            });
+        }
+
+        $shows = $query->get();
         return view('show.index',[
             'shows' => $shows,
             'resource' => 'spectacles',
@@ -48,6 +59,9 @@ class ShowController extends Controller
     public function show($id)
     {
         $show = Show::find($id);
+        $user = Auth::user();
+        $tags = Tag::all();  // Récupérer tous les tags disponibles
+
         
         //Récupérer les artistes du spectacle et les grouper par type
         $collaborateurs = [];
@@ -59,6 +73,9 @@ class ShowController extends Controller
         return view('show.show',[
             'show' => $show,
             'collaborateurs' => $collaborateurs,
+            'user' => $user,  // Passer l'utilisateur connecté à la vue
+            'tags' => $tags,  // Passer les tags à la vue
+
         ]);
    
     }
@@ -86,5 +103,31 @@ class ShowController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    
+    public function addTag(Request $request, $id)
+    {
+        $request->validate([
+            'tag_id' => 'required|exists:tags,id',
+        ]);
+
+        $show = Show::find($id);
+        $tag_id = $request->tag_id;
+
+        // Ajouter le tag au show
+        $show->tags()->attach($tag_id);
+
+        return redirect()->route('show.show', $id)->with('success', 'Tag ajouté avec succès!');
+    }
+
+
+    public function untaggedShows()
+    {
+        // Récupérer les shows qui n'ont pas de tags
+        $untaggedShows = Show::doesntHave('tags')->get();
+
+        return view('show.untagged', [
+            'untaggedShows' => $untaggedShows,
+        ]);
     }
 }

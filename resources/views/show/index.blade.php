@@ -1,9 +1,30 @@
+<!-- resources/views/show/index.blade.php -->
 @extends('layouts.main')
 
 @section('title', 'Liste des spectacles')
 
 @section('content')
     <h1>Liste des {{ $resource }}</h1>
+
+    <!-- Champ de recherche par tag -->
+    <form method="GET" action="{{ route('show.index') }}" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="tag" class="form-control" placeholder="Rechercher par tag" value="{{ request('tag') }}">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Rechercher</button>
+            </div>
+        </div>
+    </form>
+    <!-- Message de résultats de recherche -->
+    @if(request('tag'))
+        <div class="alert alert-info">
+            @if($shows->count() > 0)
+                {{ $shows->count() }} résultat(s) trouvé(s) pour le tag: <strong>{{ request('tag') }}</strong>
+            @else
+                Aucun résultat trouvé pour le tag: <strong>{{ request('tag') }}</strong>
+            @endif
+        </div>
+    @endif
 
     <!-- Tableau Bootstrap pour les spectacles -->
     <table class="table">
@@ -21,9 +42,9 @@
                 <td><a href="{{ route('show.show', $show->id) }}">{{ $show->title }}</a></td>
                 <td>@if($show->bookable){{ $show->price }} €@endif</td>
                 <td>
-                    @if($show->representations->count()==1)
+                    @if($show->representations->count() == 1)
                         1 représentation
-                    @elseif($show->representations->count()>1)
+                    @elseif($show->representations->count() > 1)
                         {{ $show->representations->count() }} représentations
                     @else
                         <em>aucune représentation</em>
@@ -90,5 +111,4 @@
         }
     }
 </script>
-
 @endsection

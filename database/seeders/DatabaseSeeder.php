@@ -14,18 +14,20 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            ArtistSeeder::class,
+            //ArtistSeeder::class,
             //UserSeeder::class,
-            LocalitySeeder::class,
+            //LocalitySeeder::class,
             //RoleSeeder::class,
-            TypeSeeder::class,
-            LocationSeeder::class,
-            ShowSeeder::class,
+            //TypeSeeder::class,
+            //LocationSeeder::class,
+            //ShowSeeder::class,
             //RepresentationSeeder::class,
-            ArtistTypeSeeder::class,
-            ArtistTypeShowSeeder::class,
-            UserRoleSeeder::class,
-            UserRepresentationSeeder::class,
+            //ArtistTypeSeeder::class,
+            //ArtistTypeShowSeeder::class,
+            //UserRoleSeeder::class,
+            //UserRepresentationSeeder::class,
+            //TagSeeder::class,
+            ShowTagSeeder::class,
         ]);
     }
 }

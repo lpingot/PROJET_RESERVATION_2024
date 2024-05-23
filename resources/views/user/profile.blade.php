@@ -15,6 +15,9 @@
                     <p class="card-text"><strong>Langue:</strong> {{ $user->langue }}</p>
                     <p class="card-text"><strong>Rôle:</strong> {{ $user->role }}</p>
                     <!-- Ajoutez d'autres informations que vous souhaitez afficher -->
+                    @if($user->role === 'admin')
+                        <a  href="{{ route('admin.dashbboard') }}" class="btn btn-primary">Accéder au tableau de bord admin</a>
+                    @endif
                 </div>
             </div>
         </div>

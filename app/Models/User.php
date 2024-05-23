@@ -51,5 +51,10 @@ class User extends Authenticatable
         // Assurez-vous de spécifier 'user_representation' comme le nom de la table pivot
         return $this->belongsToMany(Representation::class, 'user_representation');
     }
+    // App\Models\User.php
+public function isAdmin()
+{
+    return $this->role === 'admin';
+}
     
 }

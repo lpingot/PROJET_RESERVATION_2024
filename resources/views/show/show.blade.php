@@ -70,6 +70,34 @@
                 @endforeach
                 </p>
             </div>
+            <h2>Liste des tags</h2>
+               <ul>
+               @foreach($show->tags as $tag)    
+                   <li>{{ $tag->tag }}</li>
+               @endforeach
+               </ul>
+        <!-- Vérifier si l'utilisateur est un administrateur -->
+        @if ($user && $user->role === 'admin')
+            <div>
+                <h3>Admin Panel</h3>
+                <p>Bienvenue, admin! Voici des options supplémentaires pour vous. Ajoutez un tag</p>
+                <!-- Vos options administratives ici -->
+                <form action="{{ route('show.addTag', $show->id) }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="tag_id">Ajouter un tag</label>
+                        <select class="form-control" id="tag_id" name="tag_id" required>
+                            <option value="">Sélectionner un tag</option>
+                            @foreach($tags as $tag)
+                                <option value="{{ $tag->id }}">{{ $tag->tag }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Ajouter Tag</button>
+                </form>
+            </div>
+        @endif
+
         </section>
 
         <nav class="mt-4"><a href="{{ route('show.index') }}" class="btn btn-secondary">Retour à la liste</a></nav>

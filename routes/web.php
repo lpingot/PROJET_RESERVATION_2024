@@ -13,6 +13,10 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserRepresentationController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\TagController;
+
+
 
 
 /*
@@ -83,6 +87,20 @@ Route::get('/representation', [RepresentationController::class, 'index'])
 Route::get('/representation/{id}', [RepresentationController::class, 'show'])
         ->where('id', '[0-9]+')->name('representation.show');
 
+Route::get('/representation_admin', [RepresentationController::class, 'index_admin'])
+        ->name('representation_admin.index');
+Route::get('/representation_admin/{id}', [RepresentationController::class, 'show_admin'])
+        ->where('id', '[0-9]+')->name('representation_admin.show');
+
+Route::get('/representation/create', [RepresentationController::class, 'create'])->name('representation.create');
+Route::post('/representation', [RepresentationController::class, 'store'])->name('representation.store');
+
+Route::get('/representation/edit/{id}', [App\Http\Controllers\ArtistController::class, 'edit'])
+	->where('id', '[0-9]+')->name('reprensentation.edit');
+Route::put('/representation/{id}', [App\Http\Controllers\ArtistController::class, 'update'])
+	->where('id', '[0-9]+')->name('representation.update');
+
+
         
 // Ajouter cette ligne pour créer une route pour le panier
 Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
@@ -101,6 +119,13 @@ Route::get('/panier', [CartController::class, 'summary'])->name('panier.index');
 
 Route::get('/profile', [UserController::class, 'profile'])->name('user.profile')->middleware('auth');
 Route::get('/mes-representations', [UserRepresentationController::class, 'index'])->name('user_representations.index')->middleware('auth');
+Route::get('/admin', [AdminController::class, 'admin'])->name('admin.dashbboard');
 
 
+Route::get('/tag', [TagController::class, 'index'])->name('tag.index');
+Route::get('/tag/{id}', [TagController::class, 'show'])
+		->where('id', '[0-9]+')->name('tag.show');
+
+Route::post('/show/{id}/add-tag', [ShowController::class, 'addTag'])->name('show.addTag');
+Route::get('/show/untagged', [ShowController::class, 'untaggedShows'])->name('show.untagged');
 
